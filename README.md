@@ -1,6 +1,6 @@
 ![CI](https://github.com/brunoslalmeida/jenkins-jnlp-slave-dind/workflows/CI/badge.svg)
-[![DockerPulls](https://img.shields.io/docker/pulls/aquelatecnologia/jenkins-jnlp-slave-dind.svg)](https://registry.hub.docker.com/u/aquelatecnologia/jenkins-jnlp-slave-dind/)
-[![DockerStars](https://img.shields.io/docker/stars/aquelatecnologia/jenkins-jnlp-slave-dind.svg)](https://registry.hub.docker.com/u/aquelatecnologia/jenkins-jnlp-slave-dind/)
+[![DockerPulls](https://img.shields.io/docker/pulls/aquelatecnologia/docker-jnlp-server.svg)](https://registry.hub.docker.com/u/aquelatecnologia/docker-jnlp-server/)
+[![DockerStars](https://img.shields.io/docker/stars/aquelatecnologia/docker-jnlp-server.svg)](https://registry.hub.docker.com/u/aquelatecnologia/docker-jnlp-server/)
 
 # jenkins-jnlp-slave-dind
 Jenkins JNLP slave which utilises docker in docker
