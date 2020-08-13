@@ -19,6 +19,15 @@ case "$@" in
     fi ;;
 esac
 
+if [ ! -z "$DOCKER_INSECURE_REGISTRY" ]; then
+  mkdir -p /etc/docker
+
+  echo "{" > /etc/docker/daemon.json
+  echo "\"insecure-registries\" : [\"$DOCKER_INSECURE_REGISTRY\"]" >> /etc/docker/daemon.json
+  echo "}">> /etc/docker/daemon.json
+}
+fi
+
 # if -workDir is not provided try env vars
 if [ ! -z "$JENKINS_AGENT_WORKDIR" ]; then
     case "$@" in
