@@ -25,7 +25,6 @@ if [ ! -z "$DOCKER_INSECURE_REGISTRY" ]; then
   echo "{" > /etc/docker/daemon.json
   echo "\"insecure-registries\" : [\"$DOCKER_INSECURE_REGISTRY\"]" >> /etc/docker/daemon.json
   echo "}">> /etc/docker/daemon.json
-}
 fi
 
 # if -workDir is not provided try env vars
