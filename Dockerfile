@@ -65,6 +65,12 @@ RUN apk add --no-cache \
   && chmod 755 /docker-entrypoint.sh \
   && rm -rf /var/cache/apk/*
 
+RUN apt-get update && \
+    apt-get install -y libappindicator1 fonts-liberation && \
+    cd temp && \
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb  && \
+    dpkg -i google-chrome*.deb && 
+
 USER ${user}
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
 RUN mkdir /home/${user}/.jenkins && mkdir -p ${AGENT_WORKDIR}
