@@ -49,6 +49,7 @@ RUN apk add --no-cache \
         musl-dev \
         libffi-dev \
         openssl-dev \
+        glib \
         python3-dev \
         curl \
         sudo \
@@ -64,12 +65,6 @@ RUN apk add --no-cache \
   && chmod 644 /usr/share/jenkins/slave.jar \
   && chmod 755 /docker-entrypoint.sh \
   && rm -rf /var/cache/apk/*
-
-RUN apt-get update && \
-    apt-get install -y libappindicator1 fonts-liberation && \
-    cd temp && \
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb  && \
-    dpkg -i google-chrome*.deb && 
 
 USER ${user}
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
