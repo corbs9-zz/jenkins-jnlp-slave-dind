@@ -16,10 +16,10 @@ pipeline {
         } 
       }
       steps {
-        withCredentials([string(credentialsId: 'bitbucket-token', variable: 'TOKEN')]) {
-          nodejs('NodeJS 14') {   
-            sh 'npm install'         
-            sh "BB_TOKEN_BASIC_AUTH=${TOKEN} node_modules/semantic-release/bin/semantic-release.js"
+        withCredentials([string(credentialsId: 'petala-gh-token', variable: 'TOKEN')]) {
+          nodejs('NodeJS 14') {  
+            sh 'npm install'               
+            sh "GH_TOKEN=${TOKEN} node_modules/semantic-release/bin/semantic-release.js"
           }          
         }
       }
