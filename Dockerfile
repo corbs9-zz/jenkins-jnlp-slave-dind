@@ -31,7 +31,7 @@ ENV JAVA_VERSION 8u252
 ENV JAVA_ALPINE_VERSION 8.252.09-r0
 
 RUN apk add --no-cache \
-		openjdk8-jre="$JAVA_ALPINE_VERSION" \
+    openjdk8-jre="$JAVA_ALPINE_VERSION" \
 	&& [ "$JAVA_HOME" = "$(docker-java-home)" ]
 
 ENV HOME /home/${user}
@@ -64,7 +64,7 @@ RUN apk add --no-cache \
   && adduser -D -h $HOME -u ${uid} -G ${group} ${user} \
   && chmod 755 /docker-entrypoint.sh \
   && rm -rf /var/cache/apk/* \
-  && chmod +x /usr/local/bin/jenkins-agent &&\
+  && chmod +x /usr/local/bin/jenkins-agent \
   && chmod 644 /usr/share/jenkins/agent.jar \
   && ln -s /usr/local/bin/jenkins-agent /usr/local/bin/jenkins-slave \
   && ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar
