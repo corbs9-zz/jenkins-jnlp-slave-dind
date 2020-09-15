@@ -10,7 +10,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "https://bitbucket.org/midiapetala/jenkins-jnlp-slave-dind.git"
+    "url": "https://github.com/midiapetala/jenkins-jnlp-slave-dind.git"
   },
   "publishConfig": {
     "access": "restricted"
