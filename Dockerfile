@@ -1,11 +1,14 @@
+FROM jenkins/inbound-agent as builder
+
 FROM docker:dind
 
-ARG VERSION=4.3
+COPY --from=builder /usr/local/bin/jenkins-slave /usr/local/bin/jenkins-agent
+COPY --from=builder /usr/share/jenkins/agent.jar /usr/share/jenkins/agent.jar
+
 ARG user=jenkins
 ARG group=jenkins
 ARG uid=10000
 ARG gid=10000
-
 
 ARG AGENT_WORKDIR=/home/${user}/agent
 
@@ -58,13 +61,15 @@ RUN apk add --no-cache \
         git \ 
         openssh \
   && pip install --upgrade docker-compose pip \
-  && curl --create-dirs -sSLo /usr/share/jenkins/slave.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
   && addgroup -g ${gid} ${group} \
   && adduser -D -h $HOME -u ${uid} -G ${group} ${user} \
-  && chmod 755 /usr/share/jenkins \
-  && chmod 644 /usr/share/jenkins/slave.jar \
   && chmod 755 /docker-entrypoint.sh \
-  && rm -rf /var/cache/apk/*
+  && rm -rf /var/cache/apk/* \
+  && chmod +x /usr/local/bin/jenkins-agent &&\
+  && chmod 644 /usr/share/jenkins/agent.jar \
+  && ln -s /usr/local/bin/jenkins-agent /usr/local/bin/jenkins-slave \
+  && ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar
+
 
 USER ${user}
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
