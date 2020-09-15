@@ -33,7 +33,7 @@ pipeline {
 
           def docker = tool 'Docker'
 
-          sh "DOCKER_HOST=\"${dockerHost}\" ${docker}/bin/docker build -t ${imageName}:${TAG} -t ${imageName}:${TAGA} -t ${imageName}:${TAGB} -t ${imageName}:latest ."
+          sh "DOCKER_HOST=\"${dockerHost}\" ${docker}/bin/docker build --network host -t ${imageName}:${TAG} -t ${imageName}:${TAGA} -t ${imageName}:${TAGB} -t ${imageName}:latest ."
           withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             sh "DOCKER_HOST=\"${dockerHost}\" ${docker}/bin/docker login -p ${PASSWORD}  -u ${USERNAME} "
           }
