@@ -1,5 +1,4 @@
 def imageName = "aquelatecnologia/jenkins-jnlp-slave-dind"
-def dockerHost = "tcp://0.0.0.0:2375"
 
 pipeline {
   agent {
@@ -10,10 +9,7 @@ pipeline {
   stages {
     stage('Creating Release and Tagging') {
       when { 
-        anyOf { 
-          branch 'develop'; 
-          branch 'master' 
-        } 
+          branch 'develop';  
       }
       steps {
         withCredentials([string(credentialsId: 'petala-gh-token', variable: 'TOKEN')]) {
@@ -33,11 +29,11 @@ pipeline {
 
           def docker = tool 'Docker'
 
-          sh "DOCKER_HOST=\"${dockerHost}\" ${docker}/bin/docker build --network host -t ${imageName}:${TAG} -t ${imageName}:${TAGA} -t ${imageName}:${TAGB} -t ${imageName}:latest ."
+          sh "docker build --network host -t ${imageName}:${TAG} -t ${imageName}:${TAGA} -t ${imageName}:${TAGB} -t ${imageName}:latest ."
           withCredentials([usernamePassword(credentialsId: 'dockerhub-at', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-            sh "DOCKER_HOST=\"${dockerHost}\" ${docker}/bin/docker login -p ${PASSWORD}  -u ${USERNAME} "
+            sh "docker login -p ${PASSWORD}  -u ${USERNAME} "
           }
-          sh "DOCKER_HOST=\"${dockerHost}\" ${docker}/bin/docker push ${imageName}"
+          sh "docker push ${imageName}"
         }
       }
     }
