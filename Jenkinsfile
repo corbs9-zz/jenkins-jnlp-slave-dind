@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Creating Release and Tagging') {
       when { 
-          branch 'develop';  
+          branch 'master';  
       }
       steps {
         withCredentials([string(credentialsId: 'petala-gh-token', variable: 'TOKEN')]) {
@@ -21,13 +21,14 @@ pipeline {
       }
     }    
     stage('Build & Publish Docker Image') {
+      when { 
+          branch 'master';  
+      }
       steps {
         script {
           def TAG = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1 | cut -c2-6").trim()
           def TAGA = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1 | cut -c2-4").trim()
           def TAGB = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1 | cut -c2-2").trim()
-
-          def docker = tool 'Docker'
 
           sh "docker build --network host -t ${imageName}:${TAG} -t ${imageName}:${TAGA} -t ${imageName}:${TAGB} -t ${imageName}:latest ."
           withCredentials([usernamePassword(credentialsId: 'dockerhub-at', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
