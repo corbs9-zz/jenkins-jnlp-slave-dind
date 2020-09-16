@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Creating Release and Tagging') {
       when { 
-          branch 'developer';  
+          branch 'master';  
       }
       steps {
         withCredentials([string(credentialsId: 'petala-gh-token', variable: 'TOKEN')]) {
