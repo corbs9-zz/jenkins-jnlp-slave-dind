@@ -59,7 +59,7 @@ RUN apk add --no-cache \
         py-pip \
         git \ 
         openssh \
-        npm \
+        nodejs nodejs-npm \
   && pip install --upgrade docker-compose pip \
   && addgroup -g ${gid} ${group} \
   && adduser -D -h $HOME -u ${uid} -G ${group} ${user} \
