@@ -59,6 +59,7 @@ RUN apk add --no-cache \
         py-pip \
         git \ 
         openssh \
+        npm \
   && pip install --upgrade docker-compose pip \
   && addgroup -g ${gid} ${group} \
   && adduser -D -h $HOME -u ${uid} -G ${group} ${user} \
@@ -67,8 +68,9 @@ RUN apk add --no-cache \
   && chmod +x /usr/local/bin/jenkins-agent \
   && chmod 644 /usr/share/jenkins/agent.jar \
   && ln -s /usr/local/bin/jenkins-agent /usr/local/bin/jenkins-slave \
-  && ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar
-
+  && ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar \
+  && mkdir ~/fossa \
+  && curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | BINDIR=~/fossa bash
 
 USER ${user}
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
