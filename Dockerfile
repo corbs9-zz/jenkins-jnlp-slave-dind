@@ -1,10 +1,15 @@
+FROM jenkins/inbound-agent as builder
+
 FROM docker:dind
+
+COPY --from=builder /usr/local/bin/jenkins-slave /usr/local/bin/jenkins-agent
+COPY --from=builder /usr/share/jenkins/agent.jar /usr/share/jenkins/agent.jar
 
 ARG user=jenkins
 ARG group=jenkins
 ARG uid=10000
 ARG gid=10000
-ARG VERSION=3.19
+
 ARG AGENT_WORKDIR=/home/${user}/agent
 
 USER root
@@ -25,9 +30,8 @@ ENV PATH $PATH:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openj
 ENV JAVA_VERSION 8u252
 ENV JAVA_ALPINE_VERSION 8.252.09-r0
 
-RUN set -x \
-	&& apk add --no-cache \
-		openjdk8-jre="$JAVA_ALPINE_VERSION" \
+RUN apk add --no-cache \
+    openjdk8-jre="$JAVA_ALPINE_VERSION" \
 	&& [ "$JAVA_HOME" = "$(docker-java-home)" ]
 
 ENV HOME /home/${user}
@@ -35,21 +39,43 @@ ENV HOME /home/${user}
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN apk add --no-cache \
+        git \
+        gcc \
+        bash \
+        make \
+        curl \
+        glib \
         curl \
         sudo \
         bash \
-        python \
+        nodejs \
         py-pip \
-        git \
+        procps \
+        openssl \
+        git-lfs \
         openssh \
-    && pip install --upgrade docker-compose pip \
-    && curl --create-dirs -sSLo /usr/share/jenkins/slave.jar https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/${VERSION}/remoting-${VERSION}.jar \
-    && addgroup -g ${gid} ${group} \
-    && adduser -D -h $HOME -u ${uid} -G ${group} ${user} \
-    && chmod 755 /usr/share/jenkins \
-    && chmod 644 /usr/share/jenkins/slave.jar \
-    && chmod 755 /docker-entrypoint.sh \
-    && rm -rf /var/cache/apk/*
+        musl-dev \
+        libffi-dev \
+        nodejs-npm \
+        python3-dev \
+        openssl-dev \
+        openssh-client 
+
+RUN pip install --upgrade docker-compose pip \
+  && addgroup -g ${gid} ${group} \
+  && adduser -D -h $HOME -u ${uid} -G ${group} ${user} \
+  && chmod 755 /docker-entrypoint.sh \
+  && rm -rf /var/cache/apk/* \
+  && chmod +x /usr/local/bin/jenkins-agent \
+  && chmod 644 /usr/share/jenkins/agent.jar \
+  && ln -s /usr/local/bin/jenkins-agent /usr/local/bin/jenkins-slave \
+  && ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar 
+
+RUN mkdir -p /opt/fossa \
+  && cd /tmp \
+  && curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | BINDIR=/opt/fossa bash \
+  && ln -s /opt/fossa/fossa /usr/local/bin/fossa \
+  && chmod 644 /opt/fossa/fossa  
 
 USER ${user}
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
