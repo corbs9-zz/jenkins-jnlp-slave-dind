@@ -39,28 +39,27 @@ ENV HOME /home/${user}
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
 RUN apk add --no-cache \
-        curl \
-        bash \
         git \
-        git-lfs \
-        openssh-client \
-        openssl \
-        procps \
         gcc \
+        bash \
         make \
-        musl-dev \
-        libffi-dev \
-        openssl-dev \
+        curl \
         glib \
-        python3-dev \
         curl \
         sudo \
         bash \
-        py-pip \
-        git \ 
-        openssh \
         nodejs \
-        nodejs-npm
+        py-pip \
+        procps \
+        openssl \
+        git-lfs \
+        openssh \
+        musl-dev \
+        libffi-dev \
+        nodejs-npm \
+        python3-dev \
+        openssl-dev \
+        openssh-client 
 
 RUN pip install --upgrade docker-compose pip \
   && addgroup -g ${gid} ${group} \

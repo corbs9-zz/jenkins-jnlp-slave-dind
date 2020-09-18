@@ -20,7 +20,7 @@ pipeline {
     }    
     stage('Build & Publish Docker Image') {
       when { 
-          branch 'master';  
+          branch 'develop';  
       }
       steps {
         script {
