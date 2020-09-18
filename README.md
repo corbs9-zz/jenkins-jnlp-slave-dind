@@ -1,3 +1,6 @@
+[![DockerPulls](https://img.shields.io/docker/pulls/aquelatecnologia/docker-jnlp-server.svg)](https://registry.hub.docker.com/u/aquelatecnologia/docker-jnlp-server/)
+[![DockerStars](https://img.shields.io/docker/stars/aquelatecnologia/docker-jnlp-server.svg)](https://registry.hub.docker.com/u/aquelatecnologia/docker-jnlp-server/)
+
 # jenkins-jnlp-slave-dind
 Jenkins JNLP slave which utilises docker in docker
 
