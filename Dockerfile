@@ -59,8 +59,10 @@ RUN apk add --no-cache \
         py-pip \
         git \ 
         openssh \
-        nodejs nodejs-npm \
-  && pip install --upgrade docker-compose pip \
+        nodejs \
+        nodejs-npm
+
+RUN pip install --upgrade docker-compose pip \
   && addgroup -g ${gid} ${group} \
   && adduser -D -h $HOME -u ${uid} -G ${group} ${user} \
   && chmod 755 /docker-entrypoint.sh \
@@ -68,9 +70,13 @@ RUN apk add --no-cache \
   && chmod +x /usr/local/bin/jenkins-agent \
   && chmod 644 /usr/share/jenkins/agent.jar \
   && ln -s /usr/local/bin/jenkins-agent /usr/local/bin/jenkins-slave \
-  && ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar \
-  && mkdir ~/fossa \
-  && curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | BINDIR=~/fossa bash
+  && ln -sf /usr/share/jenkins/agent.jar /usr/share/jenkins/slave.jar 
+
+RUN mkdir -p /opt/fossa \
+  && cd /tmp \
+  && curl -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/fossas/fossa-cli/master/install.sh | BINDIR=/opt/fossa bash \
+  && ln -s /opt/fossa/fossa /usr/local/bin/fossa \
+  && chmod 644 /opt/fossa/fossa  
 
 USER ${user}
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
