@@ -71,7 +71,7 @@ fi
 
 # Start the Jenkins slave, and send it to the background
 # exec sudo -u jenkins java $JAVA_OPTS $JNLP_PROTOCOL_OPTS -cp /usr/share/jenkins/slave.jar hudson.remoting.jnlp.Main -headless $TUNNEL $URL $WORKDIR $OPT_JENKINS_SECRET $OPT_JENKINS_AGENT_NAME "$@" &
-exec /usr/local/bin/jenkins-agent
+exec /usr/local/bin/jenkins-agent &
 
 # Start the docker daemon in the container
 exec dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --group=jenkins
