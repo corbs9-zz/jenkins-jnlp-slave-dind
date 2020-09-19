@@ -27,8 +27,12 @@ pipeline {
       }
       steps {
         script {
+          def TAG = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1 | cut -c2-6").trim()
+          def TAGA = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1 | cut -c2-4").trim()
+          def TAGB = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1 | cut -c2-2").trim()
+
           def B_TAG = (env.BRANCH_NAME == "develop" ) ? 'stage' : 'prod'
-          sh "docker build --network host -t ${imageName}:latest -t ${imageName}:${B_TAG} ."
+          sh "docker build --network host -t ${imageName}:${TAG} -t ${imageName}:${TAGA} -t ${imageName}:${TAGB} -t ${imageName}:latest -t ${imageName}:${B_TAG} ."
           withCredentials([usernamePassword(credentialsId: 'dockerhub-at', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
             sh "docker login -p ${PASSWORD}  -u ${USERNAME} "
           }
